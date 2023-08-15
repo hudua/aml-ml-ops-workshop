@@ -5,6 +5,8 @@ ENV AZUREML_CONDA_ENVIRONMENT_PATH /azureml-envs/sklearn-0.24.1
 RUN conda create -p $AZUREML_CONDA_ENVIRONMENT_PATH \
     python=3.8.5
 
+COPY statsmodels-0.13.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl /tmp/statsmodels-0.13.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+
 # Prepend path to AzureML conda environment
 ENV PATH $AZUREML_CONDA_ENVIRONMENT_PATH/bin:$PATH
 
@@ -14,6 +16,8 @@ RUN pip install azureml-core
 RUN pip install pandas
 RUN pip install azureml-dataset-runtime
 RUN pip install numpy
+
+RUN pip install /tmp/statsmodels-0.13.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 
 # This is needed for mpi to locate libpython
 ENV LD_LIBRARY_PATH $AZUREML_CONDA_ENVIRONMENT_PATH/lib:$LD_LIBRARY_PATH
