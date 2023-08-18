@@ -1,0 +1,17 @@
+trigger: none
+
+stages:
+- stage: BuildModelDeploymentEnv
+  jobs:
+  - job: BuildModelDeploymentEnvJob
+
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - script: |
+        docker build -f aml/deployment/env/Dockerfile -t huduaamlacr.azurecr.io/repo/deploy-env:v2 .
+        az login --service-principal -u -p $(SECRET) --tenant 
+        az acr login -n huduaamlacr
+        docker push huduaamlacr.azurecr.io/repo/deploy-env:v2
+      displayName: 'Model deployment Env Build and Push'
